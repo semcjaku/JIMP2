@@ -2,7 +2,7 @@
 // Created by Kuba on 05-03-18.
 //
 
-#include "palindrome.h"
+#include "Palindrome.h"
 
 bool is_palindrome(string s)
 {

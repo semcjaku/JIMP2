@@ -2,7 +2,7 @@
 // Created by Kuba on 04-03-18.
 //
 
-#include "reverseString.h"
+#include "ReverseString.h"
 
 string reverse(string s, int l)
 {

@@ -2,7 +2,7 @@
 // Created by Kuba on 05-03-18.
 //
 
-#include "multiplicationTable.h"
+#include "MultiplicationTable.h"
 
 void MultiplicationTable(int tab[][10])
 {

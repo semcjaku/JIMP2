@@ -2,7 +2,7 @@
 // Created by Kuba on 05-03-18.
 //
 
-#include "doubleBasePalindromes.h"
+#include "DoubleBasePalindromes.h"
 
 int main()
 {

@@ -2,7 +2,7 @@
 // Created by mwypych on 21.02.17.
 //
 
-#include <Array2D.h>
+#include <Array2d.h>
 #include <gtest/gtest.h>
 
 class Array2DStep1Tests : public ::testing::Test {};
