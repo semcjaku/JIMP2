@@ -52,6 +52,7 @@ int TryDecrypt(const vector<char> &cryptogram, const vector<string> &dictionary,
 
     do
     {
+        pos2 = tmp.find(" ",pos);
         tmp2 = tmp.substr(pos, pos2!=string::npos ? (pos2-pos):(string::npos));
 
         if (find(dictionary.begin(),dictionary.end(),tmp2) != dictionary.end())
@@ -62,7 +63,6 @@ int TryDecrypt(const vector<char> &cryptogram, const vector<string> &dictionary,
         if(pos2!=string::npos)
         {
             pos = pos2+1;
-            pos2 = tmp.find(" ",pos);
         }
     } while(pos2!=string::npos);
 
