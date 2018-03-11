@@ -2,7 +2,7 @@
 // Created by Kuba on 05-03-18.
 //
 
-#include "doubleBasePalindromes.h"
+#include "DoubleBasePalindromes.h"
 
 uint64_t DoubleBasePalindromes(int max_vaule_exculsive)
 {

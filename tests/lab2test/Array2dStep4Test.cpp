@@ -2,7 +2,7 @@
 // Created by mwypych on 21.02.17.
 //
 
-#include <Array2D.h>
+#include <Array2d.h>
 #include <gtest/gtest.h>
 #include "MemLeakTest.h"
 
