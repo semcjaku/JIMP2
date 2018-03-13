@@ -1,5 +1,7 @@
 ﻿C++ programming classes problmes
 
+[![Build Status](https://travis-ci.org/zuzannnaobajtek/jimp2.svg?branch=master)](https://travis-ci.org/zuzannnaobajtek/jimp2)
+[![Build status](https://ci.appveyor.com/api/projects/status/39thleljhjmtof0t?svg=true)](https://ci.appveyor.com/project/micwypych/cpp-exercises)
 
 
 
