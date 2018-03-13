@@ -1,12 +1,12 @@
 
-project(minmaltimedifference)
+project(minimaltimedifference)
 
-set(HEDEAR_FILES MinmalTimeDifference.h)
-set(SOURCE_FILES MinmalTimeDifference.cpp)
+set(HEDEAR_FILES MinimalTimeDifference.h)
+set(SOURCE_FILES MinimalTimeDifference.cpp)
 
-add_library(libminmaltimedifference STATIC ${SOURCE_FILES})
-target_include_directories(libminmaltimedifference PUBLIC .)
+add_library(libminimaltimedifference STATIC ${SOURCE_FILES})
+target_include_directories(libminimaltimedifference PUBLIC .)
 
-add_executable(minmaltimedifference ${SOURCE_FILES} main.cpp)
+add_executable(minimaltimedifference ${SOURCE_FILES} main.cpp)
 
-target_link_libraries(minmaltimedifference libminmaltimedifference)
+target_link_libraries(minimaltimedifference libminimaltimedifference)
