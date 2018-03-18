@@ -9,11 +9,16 @@
 #include <string>
 #include <array>
 #include <memory>
+#include <vector>
+#include <algorithm>
 
 namespace tinyurl
 {
     struct TinyUrlCodec
     {
+        std::vector<std::string> LongUrls;
+        std::vector<std::string> ShortUrls;
+        std::array<char, 6> CurrentHash;
 
     };
     std::unique_ptr<TinyUrlCodec> Init();
