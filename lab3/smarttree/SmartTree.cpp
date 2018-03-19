@@ -65,6 +65,28 @@ namespace datastructures
 
     std::unique_ptr <SmartTree> RestoreTree(const std::string &tree)
     {
-
+        size_t empty=tree.find("[none]"), pos;
+        std::unique_ptr <SmartTree> root, current, newleaf;
+        std::string tree_part;
+        if(tree.compare("[none]")!=0)
+        {
+            root=CreateLeaf(stoi(tree,&pos,10));
+            current=move(root->left);
+            tree_part=tree.substr(pos+1,std::string::npos);
+        }
+        while(pos<empty)
+        {
+            newleaf=CreateLeaf(stoi(tree_part,&pos,10));
+            current->left=InsertLeftChild(move(current->left),move(newleaf));
+            current=move(current->left);
+            tree_part=tree.substr(pos+1,std::string::npos);
+        }
+        /*pos=tree_part.find("[none]");
+        if(pos!=empty+7)
+        {
+            newleaf=CreateLeaf(stoi(tree_part,&pos,10));
+            current->right=InsertLeftChild(move(current->right),move(newleaf));
+        }*/
+        return move(root);
     }
 }
