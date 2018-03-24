@@ -45,9 +45,19 @@ namespace geometry
         Square(Point a, Point b, Point c, Point d);
         ~Square();
 
+        bool IsSquare() const;
+        double Circumference() const;
+        double Area() const;
+
         
     private:
         Point a_, b_, c_, d_;
+
+        /* A---------C
+         * |         |
+         * |         |
+         * |         |
+         * B---------D*/
     };
 }
 

@@ -54,5 +54,55 @@ namespace geometry
     {
         y_=y;
     };
+
+
+
+    Square::Square()
+    {
+        a_.SetX(0);
+        a_.SetY(0);
+        b_.SetX(0);
+        b_.SetY(0);
+        c_.SetX(0);
+        c_.SetY(0);
+        d_.SetX(0);
+        d_.SetY(0);
+        cout << "Konstruktor bezparametrowy" << endl;
+    }
+
+    Square::Square(Point a, Point b, Point c, Point d)
+    {
+        a_=a;
+        b_=b;
+        c_=c;
+        d_=d;
+        cout << "Konstruktor parametrowy" << endl;
+    }
+
+    Square::~Square()
+    {
+        cout << "Destruktor! Nic nie robie, bo nie musze zwalniać pamięci!";
+    }
+
+    bool Square::IsSquare() const
+    {
+        if(a_.Distance(b_) == b_.Distance(d_) && d_.Distance(c_) == c_.Distance(a_) && a_.Distance(d_) == b_.Distance(c_))
+            return true;
+        return false;
+    }
+
+    double Square::Circumference() const
+    {
+        if(!IsSquare())
+            return 0;
+        return a_.Distance(b_)*4;
+    }
+
+    double Square::Area() const
+    {
+        if(!IsSquare())
+            return 0;
+        return pow(a_.Distance(b_), 2);
+    }
 }
 
