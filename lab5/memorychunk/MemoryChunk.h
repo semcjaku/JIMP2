@@ -19,7 +19,7 @@ namespace memorychunk
         MemoryChunk(const MemoryChunk& mc);
         MemoryChunk & operator=(const MemoryChunk& mc);
 
-        MemoryChunk(MemoryChunk &&mc) : array {nullptr};
+        MemoryChunk(MemoryChunk &&mc);
         MemoryChunk & operator=(MemoryChunk &&mc);
 
         int8_t *MemoryAt(size_t offset) const;
@@ -28,6 +28,7 @@ namespace memorychunk
 
     private:
         int8_t *array;
+        size_t elements;
     };
 }
 

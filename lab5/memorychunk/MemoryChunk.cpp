@@ -7,24 +7,26 @@
 namespace memorychunk
 {
     MemoryChunk::MemoryChunk() : array{new int8_t[1024]}{
-
+        elements=1024;
     }
 
     MemoryChunk::MemoryChunk(size_t sz)
     {
         array=new int8_t[sz];
+        elements=sz;
     }
 
     MemoryChunk::~MemoryChunk()
     {
         delete [] array;
+        elements=0;
     }
 
     MemoryChunk::MemoryChunk(const MemoryChunk& mc)
     {
-        size_t sz = sizeof(mc.array);
-        array = new int8_t[sz];
-        std::copy(array,array+sz,mc.array);
+        array = new int8_t[mc.elements];
+        elements=mc.elements;
+        std::copy(mc.array,mc.array+mc.elements,array);
     }
 
     MemoryChunk & MemoryChunk::operator=(const MemoryChunk& mc)
@@ -34,29 +36,43 @@ namespace memorychunk
         }
 
         delete[] array;
+        elements=0;
 
-        size_t sz = sizeof(mc.array);
-        array = new int8_t[sz];
-        std::copy(array,array+sz,mc.array);
+        array = new int8_t[mc.elements];
+        elements=mc.elements;
+        std::copy(mc.array,mc.array+mc.elements,array);
     }
 
-    MemoryChunk::MemoryChunk(MemoryChunk &&mc) : array {nullptr}
+    MemoryChunk::MemoryChunk(MemoryChunk &&mc)
     {
-        std::swap(array, mc.array);
+        array=mc.array;
+        elements=mc.elements;
+        mc.array=nullptr;
+        mc.elements=0;
     }
 
     MemoryChunk & MemoryChunk::operator=(MemoryChunk &&mc)
     {
+        if (this == &mc) {
+            return mc;
+        }
 
+        delete[] array;
+        elements=0;
+
+        array=mc.array;
+        elements=mc.elements;
+        mc.array=nullptr;
+        mc.elements=0;
     }
 
     int8_t *MemoryChunk::MemoryAt(size_t offset) const
     {
-
+        return &array[offset];
     }
 
     size_t MemoryChunk::ChunkSize() const
     {
-
+        return elements;
     }
 }

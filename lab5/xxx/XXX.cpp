@@ -38,7 +38,7 @@ XXX::XXX(XXX &&xxx) : name_{nullptr} {
 }
 
 XXX & XXX::operator=(XXX &&xxx) {
-;
+
     if (this == &xxx) {
         return xxx;
     }
