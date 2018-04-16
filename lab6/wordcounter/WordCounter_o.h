@@ -9,6 +9,8 @@
 #include <iostream>
 #include <map>
 #include <set>
+#include <algorithm>
+#include <fstream>
 
 using std::string;
 
@@ -29,6 +31,8 @@ namespace datastructures
 
         bool operator<(const Word&) const;
         bool operator==(const Word&) const;
+
+        string GetWord() const;
 
     private:
         string word_;
@@ -67,20 +71,24 @@ namespace datastructures
         ~WordCounter()=default;
 
         Counts operator[](string word);
-        //const Counts & operator[](string word) const;
+
 
         WordCounter(std::initializer_list<Word> list);
 
-        //static WordCounter FromInputStream(std::ifstream);
+        WordCounter FromInputStream(std::ifstream in);
         unsigned int DistinctWords();
         unsigned int TotalWords();
         std::set<Word> Words();
+        void Sort();
+        std::map<Word,Counts> GetDict();
+        void AddWord(string w);
 
     private:
         std::map<Word,Counts> dict;
     };
 
     bool operator==(const int &i, const Counts &c);
+    std::ostream& operator<< (std::ostream&,WordCounter&);
 }
 
 #endif //JIMP_EXERCISES_WORDCOUNTER_H

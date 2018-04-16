@@ -6,6 +6,18 @@
 
 namespace datastructures
 {
+    /*struct {
+        inline bool operator()(std::map<Word,Counts>::iterator a, std::map<Word,Counts>::iterator b) const
+        {
+            return a->second > b->second;
+        }
+    } customLess;*/
+
+    bool Cmp(std::map<Word,Counts>::iterator a, std::map<Word,Counts>::iterator b)
+    {
+        return a->second > b->second;
+    }
+
     Word::Word(string w)
     {
         word_=w;
@@ -50,6 +62,11 @@ namespace datastructures
     bool Word::operator==(const Word &w) const
     {
         return (word_==w.word_);
+    }
+
+    string Word::GetWord() const
+    {
+        return word_;
     }
 
 //===============================================================
@@ -148,12 +165,6 @@ namespace datastructures
         return x;
     }
 
-    /*const Counts & WordCounter::operator[](string word) const
-    {
-        Word tmp(word);
-        return dict[tmp];
-    }*/
-
     WordCounter::WordCounter(std::initializer_list<Word> list)
     {
         for(Word n:list)
@@ -162,6 +173,11 @@ namespace datastructures
             dict[n]++;
         }
 
+    }
+
+    void WordCounter::AddWord(string w)
+    {
+        dict[w]++;
     }
 
     unsigned int WordCounter::DistinctWords()
@@ -185,10 +201,50 @@ namespace datastructures
         return words;
     }
 
+    void WordCounter::Sort()
+    {
+        std::sort(dict.begin(),dict.end(), std::greater<Counts>());
+    }
+
+    std::map<Word,Counts> WordCounter::GetDict()
+    {
+        return dict;
+    };
+
+    WordCounter WordCounter::FromInputStream(std::ifstream in)
+    {
+        WordCounter result;
+        string buf;
+        char tmp;
+        if(in)
+        {
+            while(in.peek()!=EOF)
+            {
+                tmp=in.get();
+                if(isalpha(tmp))
+                    buf+=tmp;
+                else
+                {
+                    result.AddWord(buf);
+                    buf.clear();
+                }
+            }
+        }
+        return result;
+    }
+
     //------------------------------------------------------------
 
     bool operator==(const int &i, const Counts &c)
     {
         return (i==c.GetCount());
+    }
+
+    std::ostream& operator<< (std::ostream &out,WordCounter &wc)
+    {
+        wc.Sort();
+        for(auto n:wc.GetDict())
+            out<<n.first.GetWord()<<": "<<n.second.GetCount()<<"; ";
+        return out;
     }
 }
