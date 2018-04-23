@@ -9,7 +9,7 @@
 #include <MemLeakTest.h>
 #include <Iterable.h>
 
-using ::utility::Zipper;
+//using ::utility::Zipper;
 using ::utility::ZipperIterator;
 using ::utility::IterableIterator;
 using ::std::vector;
