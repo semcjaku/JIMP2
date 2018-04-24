@@ -35,8 +35,6 @@ namespace utility
         bool NotEquals(const std::unique_ptr<IterableIterator> &other) const override ;
 
     private:
-        std::vector<int>::const_iterator left_;
-        std::vector<std::string>::const_iterator right_;
         std::vector<int>::const_iterator left_end_;
         std::vector<std::string>::const_iterator right_end_;
     };
