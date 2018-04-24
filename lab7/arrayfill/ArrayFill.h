@@ -41,7 +41,7 @@ namespace arrays
     class RandomFill : public ArrayFill
     {
     public:
-        RandomFill(std::unique_ptr<default_random_engine> generator, std::unique_ptr<uniform_int_distribution<int>> distribution) : 
+        RandomFill(std::unique_ptr<default_random_engine> generator, std::unique_ptr<uniform_int_distribution<int>> distribution) :
     private:
 
     };
