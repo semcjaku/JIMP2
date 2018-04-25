@@ -17,7 +17,10 @@ namespace utility
     class IterableIterator
     {
     public:
+        IterableIterator()=default;
         ~IterableIterator()=default;
+        IterableIterator(const IterableIterator& ii);
+        IterableIterator & operator=(const IterableIterator& ii);
         virtual std::pair<int, std::string> Dereference() const =0;
         virtual IterableIterator &Next()=0;
         virtual bool NotEquals(const std::unique_ptr<IterableIterator> &other) const =0;
@@ -39,7 +42,9 @@ namespace utility
         std::vector<std::string>::const_iterator right_end_;
     };
 
-    /*class IterableIteratorWrapper : public IterableIterator
+    //==================================================================================================================
+
+    class IterableIteratorWrapper
     {
     public:
         IterableIteratorWrapper(std::unique_ptr<IterableIterator> iterator);
@@ -47,19 +52,19 @@ namespace utility
         std::pair<int, std::string> operator*();
         IterableIteratorWrapper &operator++();
     private:
-        //IterableIterator iter_;
+        std::unique_ptr<IterableIterator> iter_;
     };
 
     class Iterable
     {
     public:
-        virtual std::unique_ptr<IterableIterator> ConstBegin =0;
-        virtual std::unique_ptr<IterableIterator> ConstEnd =0;
+        virtual std::unique_ptr<IterableIterator> ConstBegin() const =0;
+        virtual std::unique_ptr<IterableIterator> ConstEnd() const =0;
         IterableIteratorWrapper cbegin() const;
         IterableIteratorWrapper cend() const;
-        //IterableIteratorWrapper begin() const;
-        //IterableIteratorWrapper end() const;
-    };*/
+        IterableIteratorWrapper begin() const;
+        IterableIteratorWrapper end() const;
+    };
 }
 
 

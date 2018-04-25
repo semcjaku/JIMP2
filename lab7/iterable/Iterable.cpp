@@ -6,6 +6,24 @@
 
 namespace utility
 {
+    IterableIterator::IterableIterator(const IterableIterator &ii)
+    {
+        left_=ii.left_;
+        right_=ii.right_;
+    }
+
+    IterableIterator & IterableIterator::operator=(const IterableIterator &ii)
+    {
+        if (this == &ii) {
+            return *this;
+        }
+
+        left_=ii.left_;
+        right_=ii.right_;
+    }
+
+    //-------------------------------------------------------------------------------------------------------------------
+
     ZipperIterator::ZipperIterator(std::vector<int>::const_iterator left, std::vector<std::string>::const_iterator right,
                                             std::vector<int>::const_iterator left_end, std::vector<std::string>::const_iterator right_end)
     {
@@ -37,27 +55,26 @@ namespace utility
         return !conj;
     }
 
-    /*---------------------------------------------------------------------------------------------------------------------
+    //---------------------------------------------------------------------------------------------------------------------
 
     IterableIteratorWrapper::IterableIteratorWrapper(std::unique_ptr<IterableIterator> iterator)
     {
-        iter_=*iterator;
+        iter_=move(iterator);
     }
 
     bool IterableIteratorWrapper::operator!=(const IterableIteratorWrapper &other)
     {
-        std::unique_ptr<IterableIterator> tmp=&(other.iter_);
-        return iter_.NotEquals(&tmp);
+        return iter_->NotEquals(other.iter_);
     }
 
     std::pair<int, std::string> IterableIteratorWrapper::operator*()
     {
-        return iter_.Dereference();
+        return iter_->Dereference();
     }
 
     IterableIteratorWrapper & IterableIteratorWrapper::operator++()
     {
-        iter_.Next();
+        iter_->Next();
         return *this;
     }
 
@@ -65,23 +82,24 @@ namespace utility
 
     IterableIteratorWrapper Iterable::cbegin() const
     {
-        IterableIteratorWrapper tmp(&this->ConstBegin);
+        IterableIteratorWrapper tmp(move(this->ConstBegin()));
         return tmp;
     }
 
     IterableIteratorWrapper Iterable::cend() const
     {
-        IterableIteratorWrapper tmp(&this->ConstEnd);
+        IterableIteratorWrapper tmp(move(this->ConstEnd()));
         return tmp;
     }
 
     IterableIteratorWrapper Iterable::begin() const
     {
-        return &this->cbegin();
+        return this->cbegin();
     }
 
     IterableIteratorWrapper Iterable::end() const
     {
-        return *this.cend();
-    }*/
+        return this->cend();
+    }
+
 }
