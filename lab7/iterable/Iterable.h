@@ -24,6 +24,7 @@ namespace utility
         virtual std::pair<int, std::string> Dereference() const =0;
         virtual IterableIterator &Next()=0;
         virtual bool NotEquals(const std::unique_ptr<IterableIterator> &other) const =0;
+        std::vector<int>::const_iterator left_begin_;
         std::vector<std::string>::const_iterator right_begin_;
         std::vector<int>::const_iterator left_;
         std::vector<std::string>::const_iterator right_;
@@ -53,6 +54,18 @@ namespace utility
 
     };
 
+    class ProductIterator : public IterableIterator
+    {
+    public:
+        ProductIterator()=default;
+        explicit ProductIterator(std::vector<int>::const_iterator left, std::vector<std::string>::const_iterator right,
+                                 std::vector<int>::const_iterator left_end, std::vector<std::string>::const_iterator right_end);
+        std::pair<int, std::string> Dereference() const override ;
+        IterableIterator &Next() override ;
+        bool NotEquals(const std::unique_ptr<IterableIterator> &other) const override ;
+
+    };
+
     //==================================================================================================================
 
     class IterableIteratorWrapper
@@ -75,7 +88,6 @@ namespace utility
         IterableIteratorWrapper begin() const;
         IterableIteratorWrapper end() const;
 
-        //IterableIteratorWrapper wrap_;
     };
 
     class Zipper : public Iterable
@@ -104,14 +116,18 @@ namespace utility
         EnumerateIterator enumit_;
     };
 
-    /*class Product : public Iterable
+    class Product : public Iterable
     {
     public:
         Product(std::vector<int> vi, std::vector<std::string> vs);
 
         std::unique_ptr<IterableIterator> ConstBegin() const override ;
         std::unique_ptr<IterableIterator> ConstEnd() const override;
-    };*/
+    private:
+        std::unique_ptr<std::vector<int>> vi_;
+        std::unique_ptr<std::vector<std::string>> vs_;
+        ProductIterator prodit_;
+    };
 }
 
 

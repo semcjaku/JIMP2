@@ -95,6 +95,51 @@ namespace utility
         return (right_!=other->right_);
     }
 
+    //--------------------------------------------------------------------------------------------------------------------
+
+    ProductIterator::ProductIterator(std::vector<int>::const_iterator left, std::vector<std::string>::const_iterator right,
+                                     std::vector<int>::const_iterator left_end, std::vector<std::string>::const_iterator right_end)
+    {
+        right_begin_=right;
+        left_begin_=left;
+        left_=left;
+        right_=right;
+        left_end_=left_end;
+        right_end_=right_end;
+    }
+
+    std::pair<int, std::string> ProductIterator::Dereference() const
+    {
+        std::pair<int, std::string> values;
+        values.first=*left_;
+        values.second=*right_;
+        return values;
+    }
+
+    IterableIterator &ProductIterator::Next()
+    {
+        if(right_!=right_end_-1)
+        {
+            right_++;
+            return *this;
+        }
+        if(left_!=left_end_-1) // && right_==right_end_-1)
+        {
+            left_++;
+            right_=right_begin_;
+            return *this;
+        }
+        //if(left_==left_end_-1 && right_==right_end_-1)
+        left_++;
+        right_++;
+        return *this;
+    }
+
+    bool ProductIterator::NotEquals(const std::unique_ptr<IterableIterator> &other) const
+    {
+        return !(right_==other->right_ && left_==other->left_);
+    }
+
     //====================================================================================================================
 
     IterableIteratorWrapper::IterableIteratorWrapper(std::unique_ptr<IterableIterator> iterator)
@@ -200,17 +245,35 @@ namespace utility
 
     //-------------------------------------------------------------------------------------------------------------------
 
-    /*Product::Product(std::vector<int> vi, std::vector<std::string> vs)
+    Product::Product(std::vector<int> vi, std::vector<std::string> vs) : prodit_(vi.begin(), vs.begin(), vi.end(), vs.end())
     {
-        std::pair<int,std::string> tmp;
-        for(int i=0;i<vi.size();i++)
-        {
-            for(int j=0;j<vs.size();j++)
-            {
-                tmp.first=vi[i];
-                tmp.second=vs[j];
-                data_.emplace_back(tmp);
-            }
-        }
-    }*/
+        vi_=std::make_unique<std::vector<int>>(vi);
+        vs_=std::make_unique<std::vector<std::string>>(vs);
+    }
+
+    std::unique_ptr<IterableIterator> Product::ConstBegin() const
+    {
+        ProductIterator x;
+        std::unique_ptr<IterableIterator> tmp=std::make_unique<ProductIterator>(x);
+        tmp->left_begin_=vi_->begin();
+        tmp->right_begin_=vs_->begin();
+        tmp->left_=vi_->begin();
+        tmp->right_=vs_->begin();
+        tmp->left_end_=vi_->end();
+        tmp->right_end_=vs_->end();
+        return move(tmp);
+    }
+
+    std::unique_ptr<IterableIterator> Product::ConstEnd() const
+    {
+        ProductIterator x;
+        std::unique_ptr<IterableIterator> tmp=std::make_unique<ProductIterator>(x);
+        tmp->left_begin_=vi_->begin();
+        tmp->right_begin_=vs_->begin();
+        tmp->left_=vi_->end();
+        tmp->right_=vs_->end();
+        tmp->left_end_=vi_->end();
+        tmp->right_end_=vs_->end();
+        return move(tmp);
+    }
 }
