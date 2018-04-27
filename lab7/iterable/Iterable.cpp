@@ -10,6 +10,8 @@ namespace utility
     {
         left_=ii.left_;
         right_=ii.right_;
+        left_end_=ii.left_end_;
+        right_end_=ii.right_end_;
     }
 
     IterableIterator & IterableIterator::operator=(const IterableIterator &ii)
@@ -20,6 +22,8 @@ namespace utility
 
         left_=ii.left_;
         right_=ii.right_;
+        left_end_=ii.left_end_;
+        right_end_=ii.right_end_;
     }
 
     //-------------------------------------------------------------------------------------------------------------------
@@ -43,8 +47,16 @@ namespace utility
 
     IterableIterator & ZipperIterator::Next()
     {
-        left_++;
-        right_++;
+        if(left_==left_end_-1 && right_==right_end_-1)
+        {
+            left_++;
+            right_++;
+            return *this;
+        }
+        if(left_!=left_end_-1)
+            left_++;
+        if(right_!=right_end_-1)
+            right_++;
         return *this;
     }
 
@@ -55,7 +67,35 @@ namespace utility
         return !conj;
     }
 
-    //---------------------------------------------------------------------------------------------------------------------
+    //--------------------------------------------------------------------------------------------------------------------
+
+    EnumerateIterator::EnumerateIterator(std::vector<std::string>::const_iterator right, std::vector<std::string>::const_iterator right_end)
+    {
+        right_begin_=right;
+        right_=right;
+        right_end_=right_end;
+    }
+
+    std::pair<int, std::string> EnumerateIterator::Dereference() const
+    {
+        std::pair<int, std::string> values;
+        values.first=right_-right_begin_+1;
+        values.second=*right_;
+        return values;
+    }
+
+    IterableIterator &EnumerateIterator::Next()
+    {
+        right_++;
+        return *this;
+    }
+
+    bool EnumerateIterator::NotEquals(const std::unique_ptr<IterableIterator> &other) const
+    {
+        return (right_!=other->right_);
+    }
+
+    //====================================================================================================================
 
     IterableIteratorWrapper::IterableIteratorWrapper(std::unique_ptr<IterableIterator> iterator)
     {
@@ -102,4 +142,75 @@ namespace utility
         return this->cend();
     }
 
+    //---------------------------------------------------------------------------------------------------------------------
+
+    Zipper::Zipper(std::vector<int> &vi, std::vector<std::string> &vs) :zipit_(vi.begin(), vs.begin(), vi.end(), vs.end())
+    {
+        vi_=std::make_unique<std::vector<int>>(vi);
+        vs_=std::make_unique<std::vector<std::string>>(vs);
+    }
+
+    std::unique_ptr<IterableIterator> Zipper::ConstBegin() const
+    {
+        ZipperIterator x;
+        std::unique_ptr<IterableIterator> tmp=std::make_unique<ZipperIterator>(x);
+        tmp->left_=vi_->begin();
+        tmp->right_=vs_->begin();
+        tmp->left_end_=vi_->end();
+        tmp->right_end_=vs_->end();
+        return move(tmp);
+    }
+
+    std::unique_ptr<IterableIterator> Zipper::ConstEnd() const
+    {
+        ZipperIterator x;
+        std::unique_ptr<IterableIterator> tmp=std::make_unique<ZipperIterator>(x);
+        tmp->left_=vi_->end();
+        tmp->right_=vs_->end();
+        tmp->left_end_=vi_->end();
+        tmp->right_end_=vs_->end();
+        return move(tmp);
+    }
+
+    //-------------------------------------------------------------------------------------------------------------------
+
+    Enumerate::Enumerate(std::vector<std::string> vs) : enumit_(vs.begin(), vs.end())
+    {
+        vs_=std::make_unique<std::vector<std::string>>(vs);
+    }
+    std::unique_ptr<IterableIterator> Enumerate::ConstBegin() const
+    {
+        EnumerateIterator x;
+        std::unique_ptr<IterableIterator> tmp=std::make_unique<EnumerateIterator>(x);
+        tmp->right_begin_=vs_->begin();
+        tmp->right_=vs_->begin();
+        tmp->right_end_=vs_->end();
+        return move(tmp);
+    }
+
+    std::unique_ptr<IterableIterator> Enumerate::ConstEnd() const
+    {
+        EnumerateIterator x;
+        std::unique_ptr<IterableIterator> tmp=std::make_unique<EnumerateIterator>(x);
+        tmp->right_begin_=vs_->begin();
+        tmp->right_=vs_->end();
+        tmp->right_end_=vs_->end();
+        return move(tmp);
+    }
+
+    //-------------------------------------------------------------------------------------------------------------------
+
+    /*Product::Product(std::vector<int> vi, std::vector<std::string> vs)
+    {
+        std::pair<int,std::string> tmp;
+        for(int i=0;i<vi.size();i++)
+        {
+            for(int j=0;j<vs.size();j++)
+            {
+                tmp.first=vi[i];
+                tmp.second=vs[j];
+                data_.emplace_back(tmp);
+            }
+        }
+    }*/
 }
