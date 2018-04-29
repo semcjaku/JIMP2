@@ -24,13 +24,25 @@ namespace academia
     class AcademiaDataValidationError : public std::invalid_argument
     {
     public:
-        AcademiaDataValidationError(const std::string &massage);
+        AcademiaDataValidationError(const std::string &message);
     };
 
     class InvalidPeselCharacter : public AcademiaDataValidationError
     {
     public:
-        InvalidPeselCharacter(const std::string &massage);
+        InvalidPeselCharacter(const std::string &message);
+    };
+
+    class InvalidPeselLength : public AcademiaDataValidationError
+    {
+    public:
+        InvalidPeselLength(const std::string &message, int len);
+    };
+
+    class InvalidPeselChecksum : public AcademiaDataValidationError
+    {
+    public:
+        InvalidPeselChecksum(const std::string &message,int sum);
     };
 
 }

@@ -54,7 +54,7 @@ TEST_F(PeselTests, ThereAreNoMemoryLeaksAfterThrowingAnExcpetion) {
 
 TEST_F(PeselTests, BaseClassOfInvalidPeselChecksumIsDataValidationErrorThen__runtime_error__Then__exception) {
   EXPECT_THROW(Pesel("00000000001"),AcademiaDataValidationError);
-  EXPECT_THROW(Pesel("00000000001"),std::runtime_error);
+  EXPECT_THROW(Pesel("00000000001"),std::logic_error);
   EXPECT_THROW(Pesel("00000000001"),std::exception);
 }
 
