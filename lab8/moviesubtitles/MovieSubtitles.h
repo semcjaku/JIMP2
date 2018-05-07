@@ -25,11 +25,11 @@ namespace moviesubs
 
     };
 
-    /*class SubRipSubtitles : public MovieSubtitles
+    class SubRipSubtitles : public MovieSubtitles
     {
     public:
         void ShiftAllSubtitlesBy(int miliseconds, int fps, std::istream *in, std::ostream *out) override;
-    };*/
+    };
 
     //--------------------------------------------ERRORS-----------------------------------------------------------------
 
