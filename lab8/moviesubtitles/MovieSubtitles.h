@@ -25,39 +25,51 @@ namespace moviesubs
 
     };
 
-   /* class SubRipSubtitles : public MovieSubtitles
+    /*class SubRipSubtitles : public MovieSubtitles
     {
     public:
         void ShiftAllSubtitlesBy(int miliseconds, int fps, std::istream *in, std::ostream *out) override;
-    };
+    };*/
 
     //--------------------------------------------ERRORS-----------------------------------------------------------------
 
-    class InvalidSubtitleLineFormat : public std::invalid_argument
-    {
-
-    };
-
-    class NegativeFrameAfterShift : public InvalidSubtitleLineFormat
-    {
-
-    };
-
-    class SubtitleEndBeforeStart : public InvalidSubtitleLineFormat
+    class SubtitlesException : public std::invalid_argument
     {
     public:
+        SubtitlesException(const std::string &line, int nr);
         int LineAt() const;
+    private:
+        int line_;
     };
 
-    class MissingTimeSpecification : public InvalidSubtitleLineFormat
+    class InvalidSubtitleLineFormat : public SubtitlesException
     {
-
+    public:
+        InvalidSubtitleLineFormat(const std::string &message, int nr);
     };
 
-    class OutOfOrderFrames : public InvalidSubtitleLineFormat
+    class NegativeFrameAfterShift : public SubtitlesException
     {
+    public:
+        NegativeFrameAfterShift(const std::string &message, int nr);
+    };
 
-    };*/
+    class SubtitleEndBeforeStart : public SubtitlesException
+    {
+    public:
+        SubtitleEndBeforeStart(const std::string &message, int nr);
+    };
+
+    class MissingTimeSpecification : public SubtitlesException
+    {
+    public: MissingTimeSpecification(const std::string &message, int nr);
+    };
+
+    class OutOfOrderFrames : public SubtitlesException
+    {
+    public:
+        OutOfOrderFrames(const std::string &message, int nr);
+    };
 }
 
 #endif //JIMP_EXERCISES_MOVIESUBTITLES_H
