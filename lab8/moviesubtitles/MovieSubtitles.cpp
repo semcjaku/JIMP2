@@ -77,11 +77,11 @@ namespace moviesubs
         if(fps<=0)
             throw std::invalid_argument("FPS lower than or equal to zero.");
         std::string sub, current;
-        int line=0;
-        unsigned long start, stop;
+        int line=1, prevlinenr=0;
+        long long start, stop, prevstart=0;
         size_t delim=0, prevdelim=0;
         char tmp[40];
-        const std::regex scheme("[0-9]\n[0-9][0-9]:[0-9][0-9]:[0-9][0-9],[0-9][0-9][0-9]\\s-->\\s[0-9][0-9]:[0-9][0-9]:[0-9][0-9],[0-9][0-9][0-9]\n\\w+\n\n");
+        const std::regex scheme{R"((\d+)\n(\d{2}\:\d{2}\:\d{2},\d{3}) --> (\d{2}\:\d{2}\:\d{2},\d{3})\n((?:.+\n*)+))"};
 
         getline(*in,sub,'\0');
         while(delim!=std::string::npos)
@@ -91,18 +91,28 @@ namespace moviesubs
             if(delim!=std::string::npos)
             {
                 current=sub.substr(prevdelim ? prevdelim+2 : 0,prevdelim ? delim-prevdelim : delim-prevdelim+1);
-                /*if(!std::regex_match(current,scheme))
-                    throw InvalidSubtitleLineFormat(current,line);*/
-                start=std::stoul(current.substr(11,3),nullptr,10)+std::stoul(current.substr(8,2),nullptr,10)*1000+std::stoul(current.substr(5,2),nullptr,10)*60000+std::stoul(current.substr(2,2),nullptr,10)*3600000;
-                stop=std::stoul(current.substr(28,3),nullptr,10)+std::stoul(current.substr(25,2),nullptr,10)*1000+std::stoul(current.substr(22,2),nullptr,10)*60000+std::stoul(current.substr(19,2),nullptr,10)*3600000;
+                if(!std::regex_match(current,scheme))
+                    throw InvalidSubtitleLineFormat(current,line);
+                start=std::stoll(current.substr(11,3),nullptr,10)+std::stoll(current.substr(8,2),nullptr,10)*1000+std::stoll(current.substr(5,2),nullptr,10)*60000+std::stoll(current.substr(2,2),nullptr,10)*3600000;
+                stop=std::stoll(current.substr(28,3),nullptr,10)+std::stoll(current.substr(25,2),nullptr,10)*1000+std::stoll(current.substr(22,2),nullptr,10)*60000+std::stoll(current.substr(19,2),nullptr,10)*3600000;
                 start+=miliseconds;
                 stop+=miliseconds;
+                if(stop<0 || start<0)
+                    throw NegativeFrameAfterShift(current.substr(2,29),line);
+                if(start>stop)
+                    throw SubtitleEndBeforeStart(current.substr(2,29), line);
+                if(current[0]!=prevlinenr+1 && prevlinenr>0)
+                    throw OutOfOrderFrames(current,line);
+                prevlinenr=current[0];
+                if(start<prevstart)
+                    throw OutOfOrderFrames(current.substr(2,29), line);
                 sprintf(tmp,"%02d:%02d:%02d,%03d", (int)(start/3600000), (int)((start%3600000)/60000), (int)(((start%3600000)%60000)/1000), (int)(((start%3600000)%60000)%1000));
                 std::string shift1(tmp);
                 sprintf(tmp," --> %02d:%02d:%02d,%03d", (int)(stop/3600000), (int)((stop%3600000)/60000), (int)(((stop%3600000)%60000)/1000), (int)(((stop%3600000)%60000)%1000));
                 std::string shift2(tmp);
                 current.replace(2,29,shift1+shift2);
                 sub.replace(prevdelim ? prevdelim+2 : 0,prevdelim ? delim-prevdelim : delim-prevdelim+1,current);
+                prevstart=start;
             }
             line++;
         }

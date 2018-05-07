@@ -26,12 +26,12 @@ class SubRipErrorCasesTest : public ::testing::Test, MemLeakTest {
 };
 
 TEST_F(SubRipErrorCasesTest, ShiftIntoNegativeFramesThrowsException) {
-  stringstream in {"1\n00:00:10,345 --> 00:00:12,678\nTEXT\n\n2\n00:19:14,141 --> 00:21:20,100\nTT\n"};
+  stringstream in {"1\n00:00:10,345 --> 00:00:12,678\nTEXT\n\n2\n00:19:14,141 --> 00:21:20,100\nTT\n\n"};
   EXPECT_THROW(subs->ShiftAllSubtitlesBy(-11400, 25, &in, &out),NegativeFrameAfterShift);
 }
 
 TEST_F(SubRipErrorCasesTest, EndFrameLaterThanStartFrameThrowsException) {
-  stringstream in {"1\n00:00:10,345 --> 00:00:12,678\nTEXT\n\n2\n00:19:14,141 --> 00:17:20,100\nTT\n"};
+  stringstream in {"1\n00:00:10,345 --> 00:00:12,678\nTEXT\n\n2\n00:19:14,141 --> 00:17:20,100\nTT\n\n"};
   try {
     subs->ShiftAllSubtitlesBy(1000, 24, &in, &out);
     FAIL() << "it throws nothing";
@@ -46,31 +46,31 @@ TEST_F(SubRipErrorCasesTest, EndFrameLaterThanStartFrameThrowsException) {
 }
 
 TEST_F(SubRipErrorCasesTest, IncompleteLineThrowsParsingError) {
-  stringstream in1 {"1\n00:00:10.345 --> 00:00:12,678\nTEXT\n\n2\n00:19:14,141 --> 00:27:20,100\nTT\n"};
+  stringstream in1 {"1\n00:00:10.345 --> 00:00:12,678\nTEXT\n\n2\n00:19:14,141 --> 00:27:20,100\nTT\n\n"};
   EXPECT_THROW(subs->ShiftAllSubtitlesBy(1000, 24, &in1, &out),InvalidSubtitleLineFormat) << "milisecond seperator should be a coma (,)";
 
-  stringstream in2 {"1\n00:00:10,345 -> 00:00:12,678\nTEXT\n\n2\n00:19:14,141 --> 00:27:20,100\nTT\n"};
+  stringstream in2 {"1\n00:00:10,345 -> 00:00:12,678\nTEXT\n\n2\n00:19:14,141 --> 00:27:20,100\nTT\n\n"};
   EXPECT_THROW(subs->ShiftAllSubtitlesBy(1000, 24, &in2, &out),InvalidSubtitleLineFormat) << "arrow is too short";
 
-  stringstream in3 {"1\n00:00:10,345 00:00:12,678\nTEXT\n\n2\n00:19:14,141 --> 00:27:20,100\nTT\n"};
+  stringstream in3 {"1\n00:00:10,345 00:00:12,678\nTEXT\n\n2\n00:19:14,141 --> 00:27:20,100\nTT\n\n"};
   EXPECT_THROW(subs->ShiftAllSubtitlesBy(1000, 24, &in3, &out),InvalidSubtitleLineFormat) << "missing arrow";
 
-  stringstream in4 {"1\n0:00:10,345 --> 00:00:12,678\nTEXT\n\n2\n00;19:14,141 --> 00:27:20,100\nTT\n"};
+  stringstream in4 {"1\n0:00:10,345 --> 00:00:12,678\nTEXT\n\n2\n00;19:14,141 --> 00:27:20,100\nTT\n\n"};
   EXPECT_THROW(subs->ShiftAllSubtitlesBy(1000, 24, &in4, &out),InvalidSubtitleLineFormat) << "semicolon instead of colon";
 
-  stringstream in5 {"1\n00:00:10,345 --> 00:00:12678\nTEXT\n\n2\n00:19:14,141 --> 00:27:20,100\nTT\n"};
+  stringstream in5 {"1\n00:00:10,345 --> 00:00:12678\nTEXT\n\n2\n00:19:14,141 --> 00:27:20,100\nTT\n\n"};
   EXPECT_THROW(subs->ShiftAllSubtitlesBy(1000, 24, &in5, &out),InvalidSubtitleLineFormat) << "seconds out of range";
 
-  stringstream in6 {"1\n00:00:10 --> 00:00:12,678\nTEXT\n\n2\n00:19:14,141 --> 0:27:20,100\nTT\n"};
+  stringstream in6 {"1\n00:00:10 --> 00:00:12,678\nTEXT\n\n2\n00:19:14,141 --> 0:27:20,100\nTT\n\n"};
   EXPECT_THROW(subs->ShiftAllSubtitlesBy(1000, 24, &in6, &out),InvalidSubtitleLineFormat) << "missing miliseconds";
 
-  stringstream in7 {"1\nTEXT\n\n2\n00:19:14,141 --> 0:17:20,100\nTT\n"};
+  stringstream in7 {"1\nTEXT\n\n2\n00:19:14,141 --> 0:17:20,100\nTT\n\n"};
   EXPECT_THROW(subs->ShiftAllSubtitlesBy(1000, 24, &in7, &out),InvalidSubtitleLineFormat);
 
-  stringstream in8 {"1\n00:00:10-->00:00:12,678\nTEXT\n\n2\n00:19:14,141 --> 0:27:20,100\nTT\n"};
+  stringstream in8 {"1\n00:00:10-->00:00:12,678\nTEXT\n\n2\n00:19:14,141 --> 0:27:20,100\nTT\n\n"};
   EXPECT_THROW(subs->ShiftAllSubtitlesBy(1000, 24, &in8, &out),InvalidSubtitleLineFormat) << "missing spaces";
 
-  stringstream in9 {"1\n00:00:10 ---> 00:00:12,678\nTEXT\n\n2\n00:19:14,141 --> 0:27:20,100\nTT\n"};
+  stringstream in9 {"1\n00:00:10 ---> 00:00:12,678\nTEXT\n\n2\n00:19:14,141 --> 0:27:20,100\nTT\n\n"};
   EXPECT_THROW(subs->ShiftAllSubtitlesBy(1000, 24, &in9, &out),InvalidSubtitleLineFormat) << "too long arrow";
 }
 
@@ -80,6 +80,6 @@ TEST_F(SubRipErrorCasesTest, NegativeFrameRateThrowsIlegalArgument) {
 }
 
 TEST_F(SubRipErrorCasesTest, OutOfOrderFramesThrowsException) {
-  stringstream in {"1\n00:00:10,345 --> 00:00:12,678\nTEXT\n\n4\n00:19:14,141 --> 00:21:20,100\nTT\n"};
+  stringstream in {"1\n00:00:10,345 --> 00:00:12,678\nTEXT\n\n4\n00:19:14,141 --> 00:21:20,100\nTT\n\n"};
   EXPECT_THROW(subs->ShiftAllSubtitlesBy(-1140, 25, &in, &out),OutOfOrderFrames);
 }

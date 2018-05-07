@@ -33,8 +33,8 @@ TEST_F(MovieSubtitlesTests, MicroDvdHasBaseClassOfMovieSubtitles) {
 
 TEST_F(MovieSubtitlesTests, SubRipHasBaseClassOfMovieSubtitles) {
   unique_ptr<MovieSubtitles> subs = make_unique<SubRipSubtitles>();
-  stringstream in {"1\n00:05:54,555 --> 00:05:56,722\nText\n\n2\n00:06:06,433 --> 00:06:07,801\nNEWLINE\n"};
+  stringstream in {"1\n00:05:54,555 --> 00:05:56,722\nText\n\n2\n00:06:06,433 --> 00:06:07,801\nNEWLINE\n\n"};
   stringstream out;
   EXPECT_NO_THROW(subs->ShiftAllSubtitlesBy(300, 24, &in, &out));
-  EXPECT_PRED2(MatchesUpToExtraNewLine,"1\n00:05:54,855 --> 00:05:57,022\nText\n\n2\n00:06:06,733 --> 00:06:08,101\nNEWLINE\n"s,out.str());
+  EXPECT_PRED2(MatchesUpToExtraNewLine,"1\n00:05:54,855 --> 00:05:57,022\nText\n\n2\n00:06:06,733 --> 00:06:08,101\nNEWLINE\n\n"s,out.str());
 }
