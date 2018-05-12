@@ -11,6 +11,7 @@
 #include <sstream>
 #include <MemLeakTest.h>
 #include <Serialization.h>
+#include <experimental/optional>
 
 using ::academia::Building;
 using ::academia::Room;
