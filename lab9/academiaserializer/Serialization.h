@@ -114,7 +114,7 @@ namespace academia
     public:
         BuildingRepository(std::initializer_list<Building> buildlist) : buildings_(buildlist) {}
 
-        const std::experimental::optional<Building>& operator[](int idx) const;
+        const std::experimental::optional<Building> operator[](int idx) const;
 
         void Add(Building b);
         void StoreAll(Serializer *s) const;

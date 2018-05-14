@@ -203,11 +203,16 @@ namespace academia
 
     //----------------------------------------------------------------------------------------
 
-    const std::experimental::optional<Building> &BuildingRepository::operator[](int idx) const
+    const std::experimental::optional<Building> BuildingRepository::operator[](int idx) const
     {
-        for(auto &n:buildings_)
+        /*for(auto &n:buildings_)
             if(n.Id()==idx)
-                return n;
+                return n;*/
+        for(int i=0;i<buildings_.size();i++)
+        {
+            if(buildings_[i].Id()==idx)
+                return buildings_[i];
+        }
     }
 
     void BuildingRepository::Add(Building b)
