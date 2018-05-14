@@ -31,5 +31,6 @@ build_script:
   - dir tests
   - dir tests\exampletest
   - tests\exampletest\example_examplelibrary_tests.exe
+  - dir tests\lab9test
   - tests\lab9test\lab9_all_tests.exe
 
