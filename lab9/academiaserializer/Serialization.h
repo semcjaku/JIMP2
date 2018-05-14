@@ -14,6 +14,7 @@
 namespace academia
 {
     class Serializable;
+    class Building;
 
     class Serializer
     {
@@ -95,19 +96,20 @@ namespace academia
     class Building : public Serializable
     {
     public:
-        Building(int nr, std::string name, std::initializer_list<std::reference_wrapper<const academia::Serializable>> roomlist) : nr_(nr), name_(name), rooms_(roomlist) {}
+        Building(int nr, std::string name, std::initializer_list<Room> roomlist) : nr_(nr), name_(name), rooms_(roomlist) {}
 
         int Id() const;
 
         void Serialize(Serializer *s) override;
         void Serialize(Serializer *s) const override;
+        std::vector<std::reference_wrapper<const Serializable>> ReferenceToRooms() const;
     private:
         int nr_;
         std::string name_;
-        const std::vector<std::reference_wrapper<const academia::Serializable>> rooms_;
+        std::vector<Room> rooms_;
     };
 
-    class BuildingRepository : public Serializable
+    class BuildingRepository
     {
     public:
         BuildingRepository(std::initializer_list<Building> buildlist) : buildings_(buildlist) {}
@@ -115,9 +117,8 @@ namespace academia
         const std::experimental::optional<Building>& operator[](int idx) const;
 
         void Add(Building b);
-        void StoreAll(Serializer *s);
-
-        void Serialize(Serializer *s) override;
+        void StoreAll(Serializer *s) const;
+        std::vector<std::reference_wrapper<const Serializable>> ReferenceToBuildings() const;
     private:
         std::vector<Building> buildings_;
     };

@@ -180,7 +180,7 @@ namespace academia
         s->Header("building");
         s->IntegerField("id",nr_);
         s->StringField("name",name_);
-        s->ArrayField("rooms",rooms_);
+        s->ArrayField("rooms",this->ReferenceToRooms());
         s->Footer("building");
     }
 
@@ -189,8 +189,16 @@ namespace academia
         s->Header("building");
         s->IntegerField("id",nr_);
         s->StringField("name",name_);
-        s->ArrayField("rooms",rooms_);
+        s->ArrayField("rooms",this->ReferenceToRooms());
         s->Footer("building");
+    }
+
+    std::vector<std::reference_wrapper<const Serializable>> Building::ReferenceToRooms() const
+    {
+        std::vector<std::reference_wrapper<const Serializable>> tmp;
+        for(auto &n : rooms_)
+            tmp.emplace_back(std::cref(n));
+        return tmp;
     }
 
     //----------------------------------------------------------------------------------------
@@ -205,6 +213,22 @@ namespace academia
     void BuildingRepository::Add(Building b)
     {
         buildings_.emplace_back(b);
+    }
+
+    void BuildingRepository::StoreAll(Serializer *s) const
+    {
+        s->Header("building_repository");
+        s->ArrayField("buildings", this->ReferenceToBuildings());
+        s->Footer("building_repository");
+    }
+
+    std::vector<std::reference_wrapper<const Serializable>> BuildingRepository::ReferenceToBuildings() const
+    {
+        std::vector<std::reference_wrapper<const Serializable>> tmp;
+        for(auto &n : buildings_)
+            tmp.emplace_back(std::cref(n));
+        return tmp;
+
     }
 
 }
