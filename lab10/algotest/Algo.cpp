@@ -64,10 +64,23 @@ namespace algo
         return(find(result.begin(),result.end(),value)!=result.end());
     }
 
-    std::map<std::string, int> DivisableBy(const std::map<std::string, int> &m, int divisor)
+    std::vector<int> DivisableBy(const std::vector<int> &m, int divisor)
     {
-        std::map<std::string, int> result;
-        transform(m.begin(),m.end(),back_inserter(result),[divisor](std::pair<std::string,int> m){if (m.second%divisor==0)return m.second;});
+        std::vector<int> result;
+        copy_if(m.begin(),m.end(),back_inserter(result),[divisor](int m){return (m%divisor==0);});
+        return result;
+    }
+
+    void SortInPlace(std::vector<int> *v)
+    {
+        sort(v->begin(),v->end());
+    }
+
+    std::vector<int> Sort(const std::vector<int> &v)
+    {
+        std::vector<int> result;
+        copy(v.begin(),v.end(),back_inserter(result));
+        sort(result.begin(),result.end());
         return result;
     }
 
