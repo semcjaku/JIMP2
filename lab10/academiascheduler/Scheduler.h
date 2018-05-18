@@ -8,6 +8,8 @@
 
 #include <vector>
 #include <algorithm>
+#include <map>
+#include <set>
 
 namespace academia
 {
@@ -15,11 +17,11 @@ namespace academia
     {
     public:
         SchedulingItem(int cid, int tid, int rid, int ts, int y) : course_id(cid), teacher_id(tid), room_id(rid), time_slot(ts), year(y) {}
-        int CourseId();
-        int TeacherId();
-        int RoomId();
-        int TimeSlot();
-        int Year();
+        int CourseId() const;
+        int TeacherId() const;
+        int RoomId() const;
+        int TimeSlot() const;
+        int Year() const;
     private:
         int course_id;
         int teacher_id;
@@ -45,6 +47,20 @@ namespace academia
     private:
         std::vector<SchedulingItem> items_;
     };
+
+    class Scheduler
+    {
+    public:
+        virtual Schedule PrepareNewSchedule(const std::vector<int> &rooms, const std::map<int, std::vector<int>> &teacher_courses_assignment, const std::map<int, std::set<int>> &courses_of_year, int n_time_slots)=0;
+    };
+
+    class GreedyScheduler : public Scheduler
+    {
+    public:
+        Schedule PrepareNewSchedule(const std::vector<int> &rooms, const std::map<int, std::vector<int>> &teacher_courses_assignment, const std::map<int, std::set<int>> &courses_of_year, int n_time_slots) override;
+    };
+
+    class NoViableSolutionFound : public std::exception {};
 }
 
 #endif //JIMP_EXERCISES_SCHEDULER_H
