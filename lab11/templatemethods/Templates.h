@@ -28,7 +28,7 @@ namespace templates
     }
 
     template<typename T>
-    auto Value(const T pointer)
+    auto Value(T pointer)
     {
         return *pointer;
     }

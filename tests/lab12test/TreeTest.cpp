@@ -21,15 +21,15 @@ class TreeTest : public ::testing::Test, MemLeakTest {
 };
 
 TEST_F(TreeTest, CanCreateTreeOfInts) {
-  Tree<int> tree;
+  Tree<int> tree{17};
 }
 
 TEST_F(TreeTest, CanCreateTreeOfDoubles) {
-  Tree<double> tree;
+  Tree<double> tree{5.0};
 }
 
 TEST_F(TreeTest, CanCreateTreeOfArbitraryType) {
-  Tree<DummyTreeDataType> tree;
+  Tree<DummyTreeDataType> tree{DummyTreeDataType{}};
 }
 
 TEST_F(TreeTest, CanInsertSingleValueIntoTree) {
