@@ -20,9 +20,9 @@ namespace tree
         size_t Depth();
         size_t Size();
         T Value();
+        std::shared_ptr<Tree<T>> Root();
 
 
-    private:
         std::shared_ptr<T> value;
         std::shared_ptr<Tree<T>> left;
         std::shared_ptr<Tree<T>> right;
@@ -94,6 +94,12 @@ namespace tree
     T Tree<T>::Value()
     {
         return *value;
+    }
+
+    template <class T>
+    std::shared_ptr<Tree<T>> Tree<T>::Root()
+    {
+        return std::make_shared<Tree<T>>(*this);
     }
 }
 
