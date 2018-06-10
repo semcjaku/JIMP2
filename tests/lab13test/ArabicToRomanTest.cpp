@@ -45,14 +45,14 @@ TEST(arabic_to_roman, arabic_513_converts_to_roman_DXIII)
     EXPECT_EQ("DXIII",ArabicToRoman(513));
 }
 
-TEST(arabic_to_roman, arabic_999_converts_to_roman_CMXLIX)
+TEST(arabic_to_roman, arabic_949_converts_to_roman_CMXLIX)
 {
-    EXPECT_EQ("CMXLIX",ArabicToRoman(999));
+    EXPECT_EQ("CMXLIX",ArabicToRoman(949));
 }
 
-TEST(arabic_to_roman, arabic_3999_converts_to_roman_MMMCMXLIX)
+TEST(arabic_to_roman, arabic_3949_converts_to_roman_MMMCMXLIX)
 {
-    EXPECT_EQ("MMMCMXLIX",ArabicToRoman(3999));
+    EXPECT_EQ("MMMCMXLIX",ArabicToRoman(3949));
 }
 
 TEST(arabic_to_roman, arabic_0_throws_exception)
